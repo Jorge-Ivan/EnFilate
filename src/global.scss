@@ -24,3 +24,30 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+.primary{
+  color: var(--ion-color-primary) !important;
+}
+.white{
+  color: white !important;
+}
+.logo-top{
+  width: 20px !important;
+  display: inline-block;
+}
+.back-turn{
+  --background:transparent;
+  background-color: transparent;
+  background-image: url('assets/back-turn.png');
+  background-position: center;
+  background-size: contain;
+  background-repeat: repeat-x;
+  height: 100%;
+}
+hr{
+  border-top: 2px solid gray;
+}
+ion-app.cameraView, ion-app.cameraView ion-content, ion-app.cameraView .nav-decor {
+  background: transparent none !important;
+  --background: transparent none !important;
+}

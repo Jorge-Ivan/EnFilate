@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title color="light">Sede APE</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" expand="block" color="secondary">
+        <ion-icon slot="start" name="close" size="large" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-img [src]="ape.image"></ion-img>
+  <div class="ion-padding">
+    <h1>{{ape.name}}</h1>
+    <p *ngIf="ape.phone"><b>Teléfonos:</b> {{ape.phone}}</p>
+    <p *ngIf="ape.address"><b>Dirección:</b> {{ape.address}}</p>
+    <p *ngIf="ape.email"><b>Correo:</b> {{ape.email}}</p>
+    <p *ngIf="ape.text">{{ape.text}}</p>
+    <div class="ion-text-center">
+      <ion-button (click)="openMap()" shape="round">
+        <ion-icon slot="start" name="navigate"></ion-icon>
+        Ver ruta
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
