@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { AlertController, NavController } from '@ionic/angular';
+import { GeneralService } from '../../services/general.service';
+import { NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-tab2',
@@ -12,7 +14,8 @@ export class Tab2Page {
   constructor(
     private qrScanner: QRScanner,
     public alertController: AlertController,
-    public navCtrl:NavController) {}
+    public navCtrl:NavController,
+    public generalService:GeneralService) {}
 
   swiperOpts = {
     allowSlidePrev:false,
@@ -58,7 +61,22 @@ export class Tab2Page {
             let data:object = JSON.parse(text);
             console.log('DECODED', typeof data, data);
             if(data && data['id']){
-              this.navCtrl.navigateForward('awaiting');
+              this.statusScan=false;
+              this.generalService.setTurn(data['id']).subscribe(
+                data=>{
+                  if(data['success']){
+                    let navigationExtras: NavigationExtras = {
+                      queryParams: {data:data['turn']}
+                    };
+                    this.navCtrl.navigateForward('awaiting',navigationExtras);
+                  }else{
+                    this.presentAlert('No se reconoce el código QR. Intente de nuevo');
+                  }
+                },
+                error=>{
+                  this.presentAlert('No se reconoce el código QR. Intente de nuevo');
+                }
+              );
             }else{
               this.statusScan=false;
               this.presentAlert('No se reconoce el código QR. Intente de nuevo');

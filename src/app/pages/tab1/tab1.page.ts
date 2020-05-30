@@ -5,6 +5,7 @@ import { google } from "google-maps";
 import { NavController, ModalController } from '@ionic/angular';
 import { environment } from '../../../environments/environment';
 import { DetailPage } from '../ape/detail/detail.page';
+import { GeneralService } from '../../services/general.service';
 
 const { Geolocation, Network } = Plugins;
 declare var google : google;
@@ -28,6 +29,7 @@ export class Tab1Page {
   private modal:HTMLIonModalElement;
 
   constructor(
+    private generalService:GeneralService,
     private modalController:ModalController,
     private navCtrl:NavController,
     private renderer: Renderer2,
@@ -248,7 +250,32 @@ export class Tab1Page {
   }
 
   loadMarkers(intents = 1){
-    let markersExamples = [
+      this.generalService.getVenues().subscribe(
+          (data:any)=>{
+            data.forEach(ape=>{
+                let added:boolean=false;
+                this.infoMarkers.forEach(marker=>{
+                    if(ape.latitude == marker.latitude && ape.longitude == marker.longitude){
+                        added=true;
+                    }
+                });
+                if(!added){
+                    console.log(ape['latitude'], ape['longitude']);
+                    let icon = 'assets/marker-ape.png';
+                    this.addMarker(ape['latitude'], ape['longitude'], icon);
+                    this.infoMarkers.push(ape);
+                }
+            });
+          },
+          error=>{
+              if(intents>3){
+                this.navCtrl.back();
+              }else{
+                this.loadMarkers(intents+1);
+              }
+          }
+      );
+    /*let markersExamples = [
       {
         id:1,
         name:'Manizales',
@@ -260,21 +287,7 @@ export class Tab1Page {
         text:'Horario: Lunes a viernes de 8:00 a.m. a 12:30 p.m. y 2:00 p.m. a 6:00 p.m.',
         image: 'https://lh5.googleusercontent.com/p/AF1QipPx7WPhduoO-IouiXhodMPpwnS4LVj0I37ac7lZ=w503-h314-k-no'
       }
-    ];
-    markersExamples.forEach(ape=>{
-        let added:boolean=false;
-        this.infoMarkers.forEach(marker=>{
-            if(ape.latitude == marker.latitude && ape.longitude == marker.longitude){
-                added=true;
-            }
-        });
-        if(!added){
-            console.log(ape['latitude'], ape['longitude']);
-            let icon = 'assets/marker-ape.png';
-            this.addMarker(ape['latitude'], ape['longitude'], icon);
-            this.infoMarkers.push(ape);
-        }
-    });
+    ];*/
   }
 
 }
